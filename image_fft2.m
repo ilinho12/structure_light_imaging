@@ -1,7 +1,9 @@
 %This function is used to make a FFT or IFFT to a gray image.
+%input can be a char or a mat
+%output is a mat
 function im_FFT=image_fft2(Name_image)
 
-if class(Name_image==char)
+if ischar(Name_image)
     S_image = imread(Name_image);
 else
     S_image = Name_image;
