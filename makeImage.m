@@ -54,9 +54,7 @@ figure;
 E_angle_phase = mod(E_phase/2/pi,1);
 image(E_angle_phase, 'CDataMapping', 'scaled'); 
 colormap(jet); title('E-angle-phase'); colorbar;
-imwrite(E_angle_phase, 'test3.bmp');
 
 figure;
 image(E_angle_add, 'CDataMapping', 'scaled'); caxis([0 1]) 
 colormap(jet); title('E-angle-add'); colorbar;
-imwrite(E_angle_add, 'test3.bmp');
