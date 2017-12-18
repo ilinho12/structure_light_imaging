@@ -76,8 +76,12 @@ diff_ty( diff_y(:) > 0) = 1;
 diff_ty( diff_y(:) == 0) = 0;
 diff_ty( diff_y(:) < 0) = -1;
 
-[ ~, locs_min_x ] = findpeaks( diff_tx );
-[ ~, locs_min_y ] = findpeaks( diff_ty );
+
+	
+[ ~, locs_peak_difftx, w_peak_difftx ] = findpeaks( diff_tx );
+[ ~, locs_peak_diffty, w_peak_diffty ] = findpeaks( diff_ty );
+locs_min_x = locs_peak_difftx( w_peak_difftx(:) >= 2 );
+locs_min_y = locs_peak_diffty( w_peak_diffty(:) >= 2 );
 Trough_x = locs_min_x(1);
 Trough_y = locs_min_y(1);
 end

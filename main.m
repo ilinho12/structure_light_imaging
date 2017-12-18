@@ -16,6 +16,8 @@ title('3D img after High-pass filter ');
 [ a2, b2, x2, y2 ] = find_range( img2 );
 img3 = cut_ellipse_lft( a2, b2, x2 ,y2, img2);
 
+%img3 = zeros( size( img2 ) ); img3( :, x1 : end ) = img2( :, x1 : end );
+
 figure;
 surf( abs( img3 ) ); shading interp;
 title('3D img after Low-pass filter ');
@@ -29,6 +31,8 @@ figure;
 image(phase_out, 'CDataMapping', 'scaled'); caxis([0 1]) 
 colormap(jet); title('Output-phace'); colorbar;
 
+%{
 figure;
 image(phase_add_o, 'CDataMapping', 'scaled'); caxis([0 1]) 
 colormap(jet); title('Output-phace-add'); colorbar;
+%}
