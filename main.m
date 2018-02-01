@@ -1,5 +1,5 @@
-clear; close all;
-
+% This function is used to reconstruction simulation of the structural light imaging
+function main
 %% Adding all subfolder to the path
 addpath(genpath(pwd));
 Path = pwd;
@@ -42,3 +42,5 @@ figure;
 image(phase_out, 'CDataMapping', 'scaled'); caxis([0 1]) 
 colormap(jet); title('Output-phace'); colorbar;
 %}
+
+end
