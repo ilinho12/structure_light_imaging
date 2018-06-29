@@ -1,0 +1,75 @@
+%%
+% This function is a test script in the programming of author;
+%%
+
+%% Initialization
+clear; close all;
+%% Adding all subfolder to the path
+addpath(genpath(pwd));
+Path = pwd;
+
+[grating, img] = testMakeImage2;
+%% Reading image
+if ischar(img)
+    path_img = img;
+    imgS = read(path_img);
+else
+    imgS = img;
+end
+
+if ~imgS 
+    disp('the img is fault!');
+    return
+end
+
+if ischar(grating)
+    path_grating = grating;
+    gratingS = read(grating);
+else
+    gratingS = grating;
+end
+
+if ~gratingS 
+    disp('the grating is fault!');
+    return
+end
+
+
+%% FFT the input image
+img_fft = image_fft2(imgS(:,:,2)-imgS(:,:,1));
+real_fft = log(abs(img_fft));
+real_fft = real_fft/max(real_fft(:));
+
+%% Select the area of first order area by mouse
+figure;
+image(real_fft, 'CDataMapping', 'scaled'); caxis([0 1]);
+window = imrect;
+pos = getPosition(window);
+rowWindow = round(pos(1)):round(pos(1)+pos(3));
+colWindow = round(pos(2)):round(pos(2)+pos(4));
+
+
+%% Filter 
+filterCenter = [median(rowWindow) median(colWindow)];
+lengthRow = length(rowWindow);
+lengthCol = length(colWindow);
+filterSize = max(lengthRow, lengthCol);
+filterValue = min(lengthRow, lengthCol)/2;
+filter = filter_LBW(size(img_fft), filterValue, 1, filterCenter(1), filterCenter(2));
+
+%% IFFT the output image
+img_area = filter.*img_fft;
+img_ifft = image_ifft2(img_area);
+phase_wrapped = angle(img_ifft);
+
+%% Unwrapped the phase of image
+%phase_unwrapped = unwrap(phase_wrapped, [], 2);
+phase_unwrapped = QualityGuidedUnwrap2D(phase_wrapped);
+
+figure;
+surf(phase_unwrapped); shading interp;
+title('Unwarped Image');
+
+%% Rebuild the 3D object
+phase_obj = phase_unwrapped - phase_grating;
+phase_obj = phase_unwrapped - phase_grating;

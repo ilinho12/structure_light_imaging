@@ -1,13 +1,16 @@
-% This function is used to find the range of the highest mountain in the image
+%%
+%% This function is used to find the range of the highest mountain in the image
 % The input must be a Complex matrix
 % The target mountain must be symmetrical with the X axis and Y axis
 % The half width of target mountain is Trough_x and Trough_y
 % The peak's position coordinates is row_max_image and column_max_image
-function	[ Trough_x, Trough_y, row_max_image, column_max_image ] = find_range( Name_image )
+%%
+function [ Trough_x, Trough_y, row_max_image, column_max_image ] = find_range( Name_image )
 
+%% Initialization
 image = abs( Name_image);
 
-% find max of image
+%% find max of image
 [ row_max_image, column_max_image ] = find( image == max( image(:) ) );
 t_row_max_image = mean( row_max_image );
 t_column_max_image = mean ( column_max_image );
@@ -15,7 +18,7 @@ row_max_image = mean( row_max_image( row_max_image(:) >= t_row_max_image ) );
 column_max_image = mean ( column_max_image( column_max_image(:) >= t_column_max_image ) );
 [ m_image, n_image ] = size( image );
 
-% Gaussian convolution
+%% Gaussian convolution
 operator_gaussian = 1/9*[ 0 1 0; 0 4 0; 0 1 0];
 operator_gaussian = operator_gaussian ./ sum(operator_gaussian(:) );
 image_new1 = zeros( m_image+2, n_image+2 );
@@ -28,8 +31,7 @@ for ii = 1 : m_image
 	end
 end
 
-
-% get the peaks and step a0, b0
+%% get the peaks and step a0, b0
 [ pks_row, locs_pks_row ] = findpeaks( image_gaussian( row_max_image, column_max_image : end ) );
 [ pks_column, locs_pks_column ] = findpeaks( image_gaussian( row_max_image : end, column_max_image) );
 g_pksXlocs_row =  pks_row .* locs_pks_row;
@@ -37,7 +39,7 @@ g_pksXlocs_column =  pks_column .* locs_pks_column;
 a0 = floor( locs_pks_row( g_pksXlocs_row(:) == max( g_pksXlocs_row ) )/4 );
 b0 = floor( locs_pks_column( g_pksXlocs_column(:) == max( g_pksXlocs_column ) )/4 );
 
-% find the width of the mountain
+%% find the width of the mountain
 cut_x = image( row_max_image, column_max_image : end );
 cut_y = image( row_max_image : end , column_max_image );
 l_cut_x = size( cut_x, 2);
